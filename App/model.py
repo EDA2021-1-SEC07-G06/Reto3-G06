@@ -36,18 +36,8 @@ assert cf
 # Construccion de modelos
 
 def newAnalyzer():
-    """ Inicializa el analizador
-
-    Crea una lista vacia para guardar todos los eventos y su contexto.
-    Crea una lista vacia para guardar todos los valores sentimentales.
-    Crea una lista vacia para guardar toda la informacion de las etiquetas del evento.
-
-
-    Se crean indices (Maps) por los siguientes criterios:
-    -Caracteristica de contenido 
-    -Artista
-
-
+    """ 
+    Inicializa el analizador
     Retorna el analizador inicializado.
     """
     analyzer = {'eventos': None,
@@ -55,7 +45,8 @@ def newAnalyzer():
                 'evento_etiquetas' : None,
                 'contenida':None,
                 'artistas': None,
-                'pistasIds': None
+                'pistasIds': None,
+                'treeEvents': None
                 }
 
     analyzer['eventos'] = lt.newList('ARRAY_LIST')
@@ -64,6 +55,7 @@ def newAnalyzer():
     analyzer['contenido'] = om.newMap(omaptype='RBT')
     analyzer['artistas'] = om.newMap(omaptype='RBT',comparefunction=compareArtistas)
     analyzer['pistasIds'] = om.newMap(omaptype='RBT',comparefunction=compareIds)
+    analyzer['treeEvents'] = om.newMap(omaptype='RBT',comparefunction=compareIds)
     return analyzer
 
 # Funciones para agregar informacion al catalogo
@@ -75,6 +67,7 @@ def addEvento(analyzer, evento):
     """
     lt.addLast(analyzer['eventos'],evento)
     addEventoArtista(analyzer, evento)
+    addTreeEvent(analyzer, evento)
 
 
 def addSentimentalValue(analyzer, value):
@@ -125,10 +118,37 @@ def addTracksId(analyzer, etiqueta):
        eventos = nuevoElemento['etiquetas']
        om.put(eventos,etiqueta['track_id'],etiqueta)
        om.put(etiquetas,etiqueta['track_id'],nuevoElemento)
+
+def addTreeEvent(analyzer, evento):
+    """
+    Añade al map de pistas cada track con las etiquetas determinadas
+    """
+    arbol = analyzer['treeEvents']
+    existeEvento = om.contains(arbol, evento['id'])
+    if existeEvento:
+       entry = om.get(arbol, evento['id'])
+       value = me.getValue(entry)
+       eventos = value['eventos']
+       om.put(eventos,  evento['id'], evento)
+    else:
+       nuevoElemento =  newTreeEvent(evento['id'])
+       eventos = nuevoElemento['eventos']
+       om.put(eventos,evento['id'],evento)
+       om.put(arbol,evento['id'],nuevoElemento)
       
        
 
 # Funciones para creacion de datos
+
+def newTreeEvent(evento):
+    """
+    Modela la estructura del entry de un evento.
+    """
+    entry = {'id': None , 'eventos': None}
+    entry['id'] = evento
+    entry['eventos'] = om.newMap(omaptype='RBT')
+    return entry
+    
 
 def newArtista(artista):
     """

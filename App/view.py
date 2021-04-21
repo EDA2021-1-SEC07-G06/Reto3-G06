@@ -45,6 +45,7 @@ def printMenu():
 
 analyzer = None
 """
+Imprime la informacion cargada de los datos.
 """
 def printData(eventos,artistas,pistas):
     print('Total de registros de eventos de escucha cargados: '+ eventos)

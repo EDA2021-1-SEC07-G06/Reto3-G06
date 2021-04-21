@@ -63,7 +63,7 @@ def newAnalyzer():
     analyzer['evento_etiquetas'] = lt.newList('ARRAY_LIST')
     analyzer['contenido'] = om.newMap(omaptype='RBT')
     analyzer['artistas'] = om.newMap(omaptype='RBT',comparefunction=compareArtistas)
-    analyzer['pistasIds'] = om.newMap(omaptype='RBT',comparefunction=compareTrackIds)
+    analyzer['pistasIds'] = om.newMap(omaptype='RBT',comparefunction=compareIds)
     return analyzer
 
 # Funciones para agregar informacion al catalogo
@@ -81,14 +81,14 @@ def addSentimentalValue(analyzer, value):
     """
     Añade un elemento con los valores de sentimiento a la lista sentimental_values.
     """
-    lt.addLast(analyzer['sentimental_values',value])
+    lt.addLast(analyzer['sentimental_values'],value)
 
 def addEtiquetas(analyzer, etiqueta):
     """
     Añade las etiquetas de un evento a la lista de evento_etiquetas. Y crea los 
     correspondientes apuntadores al map de pistas.
     """
-    lt.addLast(analyzer['evento_etiquetas',etiqueta])
+    lt.addLast(analyzer['evento_etiquetas'],etiqueta)
     addTracksId(analyzer, etiqueta)
     
 def addEventoArtista(analyzer, evento):
@@ -101,10 +101,13 @@ def addEventoArtista(analyzer, evento):
        entry = om.get(artistas, evento['artist_id'])
        value = me.getValue(entry)
        eventosArtista = value['eventos']
-       lt.put(eventosArtista,evento)
+       om.put(eventosArtista, evento['artist_id'],evento)
     else:
-       valor = newArtista(evento['artist_id'])
-       lt.addLast(valor['eventos'],evento)
+       nuevoElemento =  newArtista(evento['artist_id'])
+       eventos = nuevoElemento['eventos']
+       om.put(eventos,evento['artist_id'],evento)
+       om.put(artistas,evento['artist_id'],nuevoElemento)
+       
 
 def addTracksId(analyzer, etiqueta):
     """
@@ -116,10 +119,14 @@ def addTracksId(analyzer, etiqueta):
        entry = om.get(etiquetas, etiqueta['track_id'])
        value = me.getValue(entry)
        etiquetasTrack = value['etiquetas']
-       lt.put(etiquetasTrack, etiqueta)
+       om.put(etiquetasTrack, etiqueta['track_id'],etiqueta)
     else:
-       valor = newPistaId(etiqueta['artist_id'])
-       lt.addLast(valor['etiquetas'],etiqueta)
+       nuevoElemento =  newPistaId(etiqueta['track_id'])
+       eventos = nuevoElemento['etiquetas']
+       om.put(eventos,etiqueta['track_id'],etiqueta)
+       om.put(etiquetas,etiqueta['track_id'],nuevoElemento)
+      
+       
 
 # Funciones para creacion de datos
 """
@@ -128,7 +135,7 @@ Modela la estructura del entry de un artista.
 def newArtista(artista):
     entry = {'artista': None , 'eventos': None}
     entry['artista'] = artista
-    entry['eventos'] = lt.newList('ARRAY_LIST')
+    entry['eventos'] = om.newMap(omaptype='RBT')
     return entry
 
 """
@@ -138,11 +145,19 @@ Modela la estructura del entry de una pista.
 def newPistaId(pista):
     entry = {'pista': None , 'etiquetas': None}
     entry['pista'] = pista
-    entry['etiquetas'] = lt.newList('ARRAY_LIST')
+    entry['etiquetas'] = om.newMap(omaptype='RBT')
     return entry
 
 
 # Funciones de consulta
+
+"""
+Retorna los primeros 5 elementos cargados y los ultimos 5 elementos cargados.
+"""
+def eventosCargados(analyzer):
+
+   pass
+
 """
 Retorna el numero de elementos en el map de artistas
 """
@@ -166,17 +181,17 @@ def eventosSize(analyzer):
 
 def pistasSize(analyzer):
     pistas = analyzer['pistasIds']
-    return lt.size(pistas)
+    return om.size(pistas)
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def compareIds(id1, id2):
     """
-    Compara dos eventos
+    Compara los ids del elemento (Pueden ser id(s) de tracks o eventos)
     """
-    if (id1 == id2):
+    if (str(id1) == str(id2)):
         return 0
-    elif id1 > id2:
+    elif str(id1)> str(id2):
         return 1
     else:
         return -1
@@ -187,19 +202,10 @@ def compareArtistas(artista1, artista2):
     """
     if (artista1 == artista2):
         return 0
-    elif (artista1 > artista2):
+    elif (str(artista1) > str(artista2)):
         return 1
     else:
         return -1
 
-def compareTrackIds(id1, id2):
-    """
-    Compara dos pistas 
-    """
-    if (id1 == id2):
-        return 0
-    elif id1 > id2:
-        return 1
-    else:
-        return -1
+
 # Funciones de ordenamiento

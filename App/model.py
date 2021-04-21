@@ -129,20 +129,22 @@ def addTracksId(analyzer, etiqueta):
        
 
 # Funciones para creacion de datos
-"""
-Modela la estructura del entry de un artista.
-"""
+
 def newArtista(artista):
+    """
+    Modela la estructura del entry de un artista.
+    """
     entry = {'artista': None , 'eventos': None}
     entry['artista'] = artista
     entry['eventos'] = om.newMap(omaptype='RBT')
     return entry
 
-"""
-Modela la estructura del entry de una pista.
-"""
+
 
 def newPistaId(pista):
+    """
+    Modela la estructura del entry de una pista.
+    """
     entry = {'pista': None , 'etiquetas': None}
     entry['pista'] = pista
     entry['etiquetas'] = om.newMap(omaptype='RBT')
@@ -151,35 +153,41 @@ def newPistaId(pista):
 
 # Funciones de consulta
 
-"""
-Retorna los primeros 5 elementos cargados y los ultimos 5 elementos cargados.
-"""
+
 def eventosCargados(analyzer):
+   """
+   Retorna los primeros 5 elementos cargados y los ultimos 5 elementos cargados.
+   """
 
    pass
 
-"""
-Retorna el numero de elementos en el map de artistas
-"""
+
 
 def artistasSize(analyzer):
+
+    """
+    Retorna el numero de elementos en el map de artistas
+    """
     artistas = analyzer['artistas']
     return om.size(artistas)
+
+    
+
+def eventosSize(analyzer):
 
     """
     Retorna el numero de elementos en la lista de eventos
     """
-
-def eventosSize(analyzer):
     eventos = analyzer['eventos']
     return lt.size(eventos)
 
+
+
+def pistasSize(analyzer):
     """
     Retorna el numero de elementos en el map de pistas
 
-    """
-
-def pistasSize(analyzer):
+    """ 
     pistas = analyzer['pistasIds']
     return om.size(pistas)
 

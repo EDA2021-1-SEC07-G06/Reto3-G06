@@ -73,7 +73,7 @@ def addEvento(analyzer, evento):
     Añade un evento a la lista de eventos. Y crea los correspondientes 
     apuntadores al map artistas.
     """
-    lt.addLast(analyzer['eventos',evento])
+    lt.addLast(analyzer['eventos'],evento)
     addEventoArtista(analyzer, evento)
 
 
@@ -103,8 +103,8 @@ def addEventoArtista(analyzer, evento):
        eventosArtista = value['eventos']
        lt.put(eventosArtista,evento)
     else:
-       entry = newArtista(evento['artist_id'])
-       lt.put(entry['eventos'],evento)
+       valor = newArtista(evento['artist_id'])
+       lt.addLast(valor['eventos'],evento)
 
 def addTracksId(analyzer, etiqueta):
     """
@@ -118,8 +118,8 @@ def addTracksId(analyzer, etiqueta):
        etiquetasTrack = value['etiquetas']
        lt.put(etiquetasTrack, etiqueta)
     else:
-       entry = newPistaId(etiqueta['artist_id'])
-       lt.put(entry['eventos'],etiqueta)
+       valor = newPistaId(etiqueta['artist_id'])
+       lt.addLast(valor['etiquetas'],etiqueta)
 
 # Funciones para creacion de datos
 """
@@ -129,7 +129,7 @@ def newArtista(artista):
     entry = {'artista': None , 'eventos': None}
     entry['artista'] = artista
     entry['eventos'] = lt.newList('ARRAY_LIST')
-    pass
+    return entry
 
 """
 Modela la estructura del entry de una pista.
@@ -139,7 +139,7 @@ def newPistaId(pista):
     entry = {'pista': None , 'etiquetas': None}
     entry['pista'] = pista
     entry['etiquetas'] = lt.newList('ARRAY_LIST')
-    pass
+    return entry
 
 
 # Funciones de consulta

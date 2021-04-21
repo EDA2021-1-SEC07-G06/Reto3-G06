@@ -29,10 +29,75 @@ import csv
 El controlador se encarga de mediar entre la vista y el modelo.
 """
 
-# Inicialización del Catálogo de libros
+# Inicialización del analizador
+
+def init():
+    """
+    Llama la funcion de inicializacion  del modelo.
+    """
+    # catalog es utilizado para interactuar con el modelo
+    analyzer = model.newAnalyzer()
+    return analyzer
 
 # Funciones para la carga de datos
 
+def loadData(analyzer):
+    """
+    Carga los datos de los archivos y cargar los datos en la
+    estructura de datos
+    """
+    loadEventos(analyzer)
+    loadEtiquetas(analyzer)
+    loadSenValues(analyzer)
+    pass
+
+def loadEventos(analyzer):
+    """
+    Carga los videos del archivo.
+    """
+    eventosfile = cf.data_dir + 'context_content_features-30pct.csv'
+    input_file = csv.DictReader(open(eventosfile, encoding='utf-8'))
+    for evento in input_file:
+        model.addEvento(analyzer, evento)
+
+
+def loadEtiquetas(analyzer):
+    """
+    Carga los videos del archivo.
+    """
+    etiquetasfile = cf.data_dir + 'user_track_hashtag_timestamp-30pct.csv'
+    input_file = csv.DictReader(open(etiquetasfile, encoding='utf-8'))
+    for etiqueta in input_file:
+        model.addEtiquetas(analyzer, etiqueta)
+       
+
+def loadSenValues(analyzer):
+    """
+    Carga los videos del archivo.
+    """
+    valuesfile = cf.data_dir + 'sentiment_values.csv'
+    input_file = csv.DictReader(open(valuesfile, encoding='utf-8'))
+    for value in input_file:
+        model.addSentimentalValue(analyzer, value)
+      
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
+    """
+    Retorna el numero de artistas sin repetir.
+    """
+def tamañoArtistas(analyzer):
+    return model.artistasSize(analyzer)
+
+    """
+    Retorna el numero de eventos.
+    """
+def tamañoEventos(analyzer):
+    return model.eventosSize(analyzer)
+
+    """
+    Retorna el numero de artistas sin repetir.
+    """
+def tamañoPistas(analyzer):
+    return model.pistasSize(analyzer)
+

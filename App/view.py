@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+from App.model import artistasSize
 import config as cf
 import sys
 import controller
@@ -37,10 +38,19 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Reproducciones dada una caracteristica y rango. ")
+    print("3- Encontrar musica para festejar. ")
+    print("4- Encontrar muscia para estudiar. ")
+    print("5- Estudiar los generos musicales ")
 
-catalog = None
-
+analyzer = None
+"""
+"""
+def printData(eventos,artistas,pistas):
+    print('Total de registros de eventos de escucha cargados: '+ eventos)
+    print('Total de artistas únicos cargados: ' + artistas)
+    print('Total de pistas de audio únicas cargadas: ' + pistas)
+      
 """
 Menu principal
 """
@@ -49,8 +59,20 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        analyzer = controller.init()
+        controller.loadData(analyzer)
+        eventos = controller.tamañoEventos(analyzer)
+        artistas = controller.tamañoArtistas(analyzer)
+        pistas = controller.tamañoPistas(analyzer)
+        printData(str(eventos),str(artistas),str(pistas))
 
     elif int(inputs[0]) == 2:
+        pass
+    elif int(inputs[0]) == 3:
+        pass
+    elif int(inputs[0]) == 4:
+        pass
+    elif int(inputs[0]) == 5:
         pass
 
     else:

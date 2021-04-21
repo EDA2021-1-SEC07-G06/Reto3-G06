@@ -21,6 +21,7 @@
  """
 
 
+
 import config as cf
 import sys
 import controller
@@ -47,11 +48,58 @@ analyzer = None
 """
 Imprime la informacion cargada de los datos.
 """
-def printData(eventos,artistas,pistas):
+def printData(eventos,artistas,pistas,listaI, listaF):
     print('Total de registros de eventos de escucha cargados: '+ eventos)
     print('Total de artistas únicos cargados: ' + artistas)
-    print('Total de pistas de audio únicas cargadas: ' + pistas)
+    print('Total de pistas de audio únicas cargadas: ' + pistas + '\n')
+
+    tamañoI = lt.size(listaI)
+    tamañoF = lt.size(listaF)
+    ci = 0
+    cf = 0
+
+    print('***************************************************\n')
+
+    print('PRIMEROS 5 ELEMENTOS CARGADOS')
+    print('')
+
+    while ci < tamañoI:
+
+        datos = lt.getElement(listaI,ci)
+        
       
+        print('***************************************************\n')
+        print('Id del evento: ' + datos['id'])
+        print('')
+        print('Caracteristicas de contenido: \n' + 'Instrumentalidad: ' + datos['instrumentalness'] +'\n'+'Acústica' + datos['acousticness'] +'\n' 
+        +'Liveness: ' + datos['liveness'] +'\n'+'speechiness: ' + datos['speechiness'] +'\n'+'Energía: ' + datos['energy'] +'\n'
+        +'Capacidad de baile: ' + datos['danceability'] +'\n'+'Valencia'  + datos['valence'] +'\n')
+        
+        print('Caracteristicas de contexto: \n' + 'Creado en: ' + datos['created_at'] +'\n'+'Idioma del tweet: ' 
+         + datos['tweet_lang'] +'\n' +'Idioma: '+ datos['lang'] +'\n'+'Time Zone: '+ datos['time_zone'] +'\n')
+       
+        
+        ci += 1
+    print('***************************************************\n')
+    print('ULTIMOS 5 ELEMENTOS CARGADOS')
+    print('')
+    while cf < tamañoF:
+
+        datosF = lt.getElement(listaF,cf)
+
+    
+        print('***************************************************\n')
+        print('Id del evento: ' + datosF['id'])
+        print('')
+        print('Caracteristicas de contenido: \n' + 'Instrumentalidad: ' + datosF['instrumentalness'] +'\n'+'Acústica' + datosF['acousticness'] +'\n' 
+        +'Liveness: ' + datosF['liveness'] +'\n'+'speechiness: ' + datosF['speechiness'] +'\n'+'Energía: ' + datosF['energy'] +'\n'
+        +'Capacidad de baile: ' + datosF['danceability'] +'\n'+'Valencia'  + datosF['valence'] +'\n')
+       
+        print('Caracteristicas de contexto: \n' + 'Creado en: ' + datosF['created_at'] +'\n'+'Idioma del tweet: ' 
+         + datosF['tweet_lang'] +'\n' +'Idioma: '+ datosF['lang'] +'\n'+'Time Zone: '+ datosF['time_zone'] +'\n')
+       
+
+        cf += 1
 """
 Menu principal
 """
@@ -61,11 +109,11 @@ while True:
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         analyzer = controller.init()
-        controller.loadData(analyzer)
+        listas = controller.loadData(analyzer)
         eventos = controller.tamañoEventos(analyzer)
         artistas = controller.tamañoArtistas(analyzer)
         pistas = controller.tamañoPistas(analyzer)
-        printData(str(eventos),str(artistas),str(pistas))
+        printData(str(eventos),str(artistas),str(pistas),listas[0],listas[1])
 
     elif int(inputs[0]) == 2:
         pass

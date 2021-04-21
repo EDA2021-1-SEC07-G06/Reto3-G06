@@ -21,6 +21,7 @@
  """
 
 import config as cf
+from DISClib.ADT import list as lt
 import model
 import csv
 
@@ -46,10 +47,12 @@ def loadData(analyzer):
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
     """
-    loadEventos(analyzer)
+    
     loadEtiquetas(analyzer)
     loadSenValues(analyzer)
-    pass
+    return loadEventos(analyzer)
+    
+    
 
 def loadEventos(analyzer):
     """
@@ -57,8 +60,28 @@ def loadEventos(analyzer):
     """
     eventosfile = cf.data_dir + 'context_content_features-small.csv'
     input_file = csv.DictReader(open(eventosfile, encoding='utf-8'))
+    contador = 0
+    tamaño = 0
+    listaInicial = lt.newList('ARRAY_LIST')
+    listaFinal = lt.newList('ARRAY_LIST')
+
+    fichero = open(eventosfile, encoding='utf-8')
+    tamaño = len(fichero.readlines())
+    
+    
     for evento in input_file:
+        if contador <= 4:
+            lt.addLast(listaInicial,evento)
+            
+        elif contador >= (tamaño - 6):
+            lt.addLast(listaFinal,evento)
+
         model.addEvento(analyzer, evento)
+        contador += 1
+
+   
+    
+    return listaInicial, listaFinal
 
 
 def loadEtiquetas(analyzer):

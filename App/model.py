@@ -237,3 +237,17 @@ def compareArtistas(artista1, artista2):
 
 
 # Funciones de ordenamiento
+
+def getReproducciones(analyzer, contenido, min, max):
+    """
+    Retorna el total de reproducciones (eventos de escucha) que se tienen en el sistema de
+    recomendación basado en una característica de contenido y con un rango determinado
+    """
+    pass
+
+def getFestejar (analyzer, min_energy, max_energy, min_dance, max_dance):
+    """
+    Retorna las pistas en el sistema de recomendación que pueden utilizarse en una fiesta
+    que se tendrá próximamente según su Energy y Danceability 
+    """
+    pass

@@ -41,8 +41,9 @@ def printMenu():
     print("1- Cargar información en el catálogo")
     print("2- Reproducciones dada una caracteristica y rango. ")
     print("3- Encontrar musica para festejar. ")
-    print("4- Encontrar muscia para estudiar. ")
+    print("4- Encontrar musica para estudiar. ")
     print("5- Estudiar los generos musicales ")
+    print("6- Género musical más escuchado en un horario")
 
 analyzer = None
 """
@@ -116,13 +117,33 @@ while True:
         printData(str(eventos),str(artistas),str(pistas),listas[0],listas[1])
 
     elif int(inputs[0]) == 2:
-        pass
+        contenido = input("Característica de contenido buscada: ")
+        min = int(input("Valor minimo: "))
+        max = int(input("Valor máximo: "))
+        respuesta = controller.getReproducciones(analyzer, contenido, min, max)
+        if respuesta == None:
+            print("No se encontraron reproducciones")
+        else:
+            printfunción(respuesta)
+        
     elif int(inputs[0]) == 3:
-        pass
+        min_energy = int(input("Valor minimo de energia: "))
+        max_energy = int(input("Valor máximo de energia: "))
+        min_dance = int(input("Valor minimo de danceability: "))
+        max_dance = int(input("Valor máximo de danceability: "))
+        respuesta = controller.getFestejar(analyzer, min_energy, max_energy, min_dance, max_dance)
+        if respuesta == None:
+            print("No se encontraron pistas que cumplan con los requisitos")
+        else:
+            printfunción(respuesta)
+
     elif int(inputs[0]) == 4:
         pass
     elif int(inputs[0]) == 5:
         pass
+    elif int(inputs[0]) == 6:
+        pass
+
 
     else:
         sys.exit(0)

@@ -27,6 +27,7 @@
 
 import config
 from DISClib.DataStructures import bstnode
+from DISClib.DataStructures import bst
 from DISClib.Utils import error as error
 from DISClib.ADT import list as lt
 assert config
@@ -814,7 +815,7 @@ def keysRange(root, keylo, keyhi, lstkeys, cmpfunction):
         keylo: limite inferior
         keylohi: limite superiorr
     Returns:
-        Las llaves en el rago especificado
+        Las llaves en el rango especificado
     Raises:
         Excep
     """
@@ -843,7 +844,7 @@ def valuesRange(root, keylo, keyhi, lstvalues, cmpfunction):
         keylo: limite inferior
         keylohi: limite superior
     Returns:
-        Las llaves en el rago especificado
+        Las llaves en el rango especificado
     Raises:
         Excep
     """

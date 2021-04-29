@@ -101,6 +101,13 @@ def printData(eventos,artistas,pistas,listaI, listaF):
        
 
         cf += 1
+
+def printReproducciones (reproducciones, artistas):
+    pass
+
+def printFestejar (pistas):
+    pass
+
 """
 Menu principal
 """
@@ -124,7 +131,7 @@ while True:
         if respuesta == None:
             print("No se encontraron reproducciones")
         else:
-            printfunción(respuesta)
+            printReproducciones(respuesta)
         
     elif int(inputs[0]) == 3:
         min_energy = int(input("Valor minimo de energia: "))
@@ -135,7 +142,7 @@ while True:
         if respuesta == None:
             print("No se encontraron pistas que cumplan con los requisitos")
         else:
-            printfunción(respuesta)
+            printFestejar(respuesta)
 
     elif int(inputs[0]) == 4:
         pass

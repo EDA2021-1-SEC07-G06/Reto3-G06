@@ -107,8 +107,22 @@ def printReproducciones (respuesta):
     print("\n Total de reproducciones: " + str(respuesta[0])
           + "\n Total de artistas únicos: " + str(respuesta[1]) + "\n")
 
-def printFestejar (pistas):
-    pass
+def printMusicapara(respuesta, c1, c2):
+    print("\n Total de pistas únicas: " + str(respuesta[0])
+    print("--- Unique track id ---")
+    cont = 0
+    if om.size(respuesta[1]) >= 5:
+        while cont < 5:
+            for pista in lt.iterator(respuesta[1]):
+                print("\nTrack: "+ str(pista) + " with " + str(c1) + " of " + str(pista[0]) + 
+                      " and " + str(c2) " of " + str(pista[1]))
+
+    else:
+        while cont <= om.size(respuesta[1]):
+            print("\nTrack: "+ str(pista) + " with " + str(c1) + " of " + str(pista[0]) + 
+                      " and " + str(c2) " of " + str(pista[1]))
+        
+
 
 """
 Menu principal
@@ -140,20 +154,41 @@ while True:
     elif int(inputs[0]) == 3:
         min_energy = float(input("Valor minimo de energy: "))
         max_energy = float(input("Valor máximo de energy: "))
-        min_dance = float(input("Valor minimo de danceabillity: "))
-        max_dance = float(input("Valor máximo de danceabillity: "))
+        min_dance = float(input("Valor minimo de danceability: "))
+        max_dance = float(input("Valor máximo de danceability: "))
+
+        c1 = str(energy)
+        c2 = str(danceability)
         
-        respuesta = controller.getFestejar(analyzer, min_energy, max_energy, min_dance, max_dance)
-        print("++++++ Req. No. 2 results ... +++++ \n" + contenido + " is between "
-              + str(min) + " and " + str(max))
+        respuesta = controller.getMusicapara(analyzer, c1, c2, min_energy, max_energy, min_dance, max_dance)
+        print("++++++ Req. No. 2 results ... +++++ \n")
+        print("\nenergy is between "+ str(min_energy) + " and " + str(max_energy))
+        print("\ndanceability is between "+ str(min_dance) + " and " + str(max_dance))
 
         if respuesta == None:
             print("No se encontraron pistas que cumplan con los requisitos")
         else:
-            printFestejar(respuesta)
+            printMusicapara(respuesta, c1, c2)
 
     elif int(inputs[0]) == 4:
-        pass
+        min_inst = float(input("Valor minimo de instrumentalidad: "))
+        max_inst = float(input("Valor máximo de instrumentalidad: "))
+        min_tempo = float(input("Valor minimo de tempo: "))
+        max_tempo = float(input("Valor máximo de tempo: "))
+
+        c1 = str(instrumentalness)
+        c2 = str(tempo)
+        
+        respuesta = controller.getMusicapara(analyzer, c1, c2, min_inst, max_inst, min_tempo, max_tempo)
+        print("++++++ Req. No. 3 results ... +++++ \n")
+        print("\ninstrumentalness is between "+ str(min_inst) + " and " + str(max_inst))
+        print("\ntempo is between "+ str(min_tempo) + " and " + str(max_tempo))
+
+        if respuesta == None:
+            print("No se encontraron pistas que cumplan con los requisitos")
+        else:
+            printMusicapara(respuesta, c1, c2)
+
     elif int(inputs[0]) == 5:
         pass
     elif int(inputs[0]) == 6:

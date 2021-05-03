@@ -43,7 +43,7 @@ def newAnalyzer():
     analyzer = {'eventos': None,
                 'sentimental_values': None,
                 'evento_etiquetas' : None,
-                'contenida':None,
+                'contenido':None,
                 'artistas': None,
                 'pistasIds': None,
                 'treeEvents': None
@@ -258,9 +258,28 @@ def getReproducciones(analyzer, contenido, min, max):
 
     return (num_eventos, num_artistas)
 
-def getFestejar (analyzer, min_energy, max_energy, min_dance, max_dance):
+def getMusicapara(analyzer, c1, c2, min_c1, max_c1, min_c2, max_c2):
     """
-    Retorna las pistas en el sistema de recomendación que pueden utilizarse en una fiesta
-    que se tendrá próximamente según su Energy y Danceability 
+    Retorna las pistas en el sistema de recomendación que cumplen dos características
     """
-    pass
+    map_pista_cumple = om.newMap(omaptype='RBT',comparefunction=compareIds)
+
+    for pista in lt.iterator(analyzer["eventos"]):
+        if float(pista[c1]) <= max_c1 and float(pista[c1]) >= min_c1:
+            if float(pista[c2]) <= max_c2 and float(pista[c2]) >= min_c2:
+                om.put(pista_cumple, pista["track_id"], (pista[c1], pista[c2]))
+
+    num_unicas = om.size(map_pista_cumple)
+
+    if num_unicas == 0:
+        return None
+
+    return (num_unicas, map_pista_cumple)
+
+    
+
+
+
+    
+
+

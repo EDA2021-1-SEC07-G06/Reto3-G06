@@ -246,15 +246,17 @@ def getReproducciones(analyzer, contenido, min, max):
     num_eventos = 0
     map_art_cumple = om.newMap(omaptype='RBT',comparefunction=compareArtistas)
 
-
-    for evento in lt.iterator(analyzer):
-        if evento[contenido] <= max and evento[contenido] >= min :
+    for evento in lt.iterator(analyzer["eventos"]):
+        if float(evento[contenido]) <= max and float(evento[contenido]) >= min :
             num_eventos += 1
             om.put(map_art_cumple, evento['artist_id'],"")
 
     num_artistas = om.size(map_art_cumple)
 
-return (num_eventos, num_artistas)
+    if num_eventos == 0:
+        return None
+
+    return (num_eventos, num_artistas)
 
 def getFestejar (analyzer, min_energy, max_energy, min_dance, max_dance):
     """

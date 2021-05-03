@@ -44,6 +44,7 @@ def printMenu():
     print("4- Encontrar musica para estudiar. ")
     print("5- Estudiar los generos musicales ")
     print("6- Género musical más escuchado en un horario")
+    print("0- Salir")
 
 analyzer = None
 """
@@ -104,7 +105,7 @@ def printData(eventos,artistas,pistas,listaI, listaF):
 
 def printReproducciones (respuesta):
     print("\n Total de reproducciones: " + str(respuesta[0])
-          + "\n Total de artistas únicos: " + str(respuesta[1]))
+          + "\n Total de artistas únicos: " + str(respuesta[1]) + "\n")
 
 def printFestejar (pistas):
     pass
@@ -126,22 +127,26 @@ while True:
 
     elif int(inputs[0]) == 2:
         contenido = input("Característica de contenido buscada: ")
-        min = int(input("Valor minimo: "))
-        max = int(input("Valor máximo: "))
+        min = float(input("Valor minimo: "))
+        max = float(input("Valor máximo: "))
         respuesta = controller.getReproducciones(analyzer, contenido, min, max)
         print("++++++ Req. No. 1 results ... +++++ \n" + contenido + " is between "
               + str(min) + " and " + str(max))
         if respuesta == None:
-            print("\n No se encontraron reproducciones")
+            print("\nNo se encontraron reproducciones\n")
         else:
             printReproducciones(respuesta)
-        
+
     elif int(inputs[0]) == 3:
-        min_energy = int(input("Valor minimo de energia: "))
-        max_energy = int(input("Valor máximo de energia: "))
-        min_dance = int(input("Valor minimo de danceability: "))
-        max_dance = int(input("Valor máximo de danceability: "))
+        min_energy = float(input("Valor minimo de energy: "))
+        max_energy = float(input("Valor máximo de energy: "))
+        min_dance = float(input("Valor minimo de danceabillity: "))
+        max_dance = float(input("Valor máximo de danceabillity: "))
+        
         respuesta = controller.getFestejar(analyzer, min_energy, max_energy, min_dance, max_dance)
+        print("++++++ Req. No. 2 results ... +++++ \n" + contenido + " is between "
+              + str(min) + " and " + str(max))
+
         if respuesta == None:
             print("No se encontraron pistas que cumplan con los requisitos")
         else:
@@ -153,7 +158,6 @@ while True:
         pass
     elif int(inputs[0]) == 6:
         pass
-
 
     else:
         sys.exit(0)

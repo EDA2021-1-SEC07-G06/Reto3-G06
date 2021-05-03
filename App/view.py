@@ -115,21 +115,21 @@ def printMusicapara(respuesta, c1, c2):
     lst = om.valueSet(respuesta[1])
     cod = om.keySet(respuesta[1])
     if lt.size(lst) >= 5:
-        while cont < 5:
-            for id in lt.iterator(cod):
-                for pista in lt.iterator(lst):
+        for id in lt.iterator(cod):
+            for pista in lt.iterator(lst):
+                while cont < 5:
                     cont += 1
-                    print("\nTrack: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
-                      " and " + str(c2) + " of " + str(pista[1]))
+                    print("Track: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
+                      " and " + str(c2) + " of " + str(pista[1]) + "\n")
                     
 
     else:
-        while cont <= lt.size(lst):
-            for id in lt.iterator(cod):
-                for pista in lt.iterator(lst):
+        for id in lt.iterator(cod):
+            for pista in lt.iterator(lst):
+                while cont <= lt.size(lst):
                     cont += 1
-                    print("\nTrack: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
-                      " and " + str(c2) + " of " + str(pista[1]))
+                    print("Track: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
+                      " and " + str(c2) + " of " + str(pista[1]) + "\n")
                     
 
 

@@ -133,10 +133,10 @@ def getReproducciones(analyzer, contenido, min, max):
     return rep
 
 
-def getMusicapara(analyzer, c1, c2 min_c1, max_c1, min_c2, max_c2):
+def getMusicapara(analyzer, c1, c2, min_c1, max_c1, min_c2, max_c2):
     """
     Retorna las pistas en el sistema de recomendación que cumplen dos características
     """
-    musica = model.getMusicapara(analyzer, c1, c2 min_c1, max_c1, min_c2, max_c2)
+    musica = model.getMusicapara(analyzer, c1, c2, min_c1, max_c1, min_c2, max_c2)
     return musica
 

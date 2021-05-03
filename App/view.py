@@ -25,6 +25,7 @@
 import config as cf
 import sys
 import controller
+from DISClib.ADT import orderedmap as om
 from DISClib.ADT import list as lt
 assert cf
 
@@ -108,20 +109,26 @@ def printReproducciones (respuesta):
           + "\n Total de artistas únicos: " + str(respuesta[1]) + "\n")
 
 def printMusicapara(respuesta, c1, c2):
-    print("\n Total de pistas únicas: " + str(respuesta[0])
-    print("--- Unique track id ---")
+    print("\nTotal de pistas únicas: " + str(respuesta[0]))
+    print("\n... Unique track id ...\n")
     cont = 0
-    if om.size(respuesta[1]) >= 5:
+    lst = om.valueSet(respuesta[1])
+    cod = om.keySet(respuesta[1])
+    if lt.size(lst) >= 5:
         while cont < 5:
-            for pista in lt.iterator(respuesta[1]):
-                print("\nTrack: "+ str(pista) + " with " + str(c1) + " of " + str(pista[0]) + 
-                      " and " + str(c2) " of " + str(pista[1]))
+            for id in lt.iterator(cod):
+                for pista in lt.iterator(lst):
+                    print("\nTrack: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
+                      " and " + str(c2) + " of " + str(pista[1]))
+                    cont += 1
 
     else:
-        while cont <= om.size(respuesta[1]):
-            print("\nTrack: "+ str(pista) + " with " + str(c1) + " of " + str(pista[0]) + 
-                      " and " + str(c2) " of " + str(pista[1]))
-        
+        while cont <= lt.size(lst):
+            for id in lt.iterator(cod):
+                for pista in lt.iterator(lst):
+                    print("\nTrack: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
+                      " and " + str(c2) + " of " + str(pista[1]))
+                    cont += 1
 
 
 """
@@ -157,13 +164,13 @@ while True:
         min_dance = float(input("Valor minimo de danceability: "))
         max_dance = float(input("Valor máximo de danceability: "))
 
-        c1 = str(energy)
-        c2 = str(danceability)
+        c1 = "energy"
+        c2 = "danceability"
         
         respuesta = controller.getMusicapara(analyzer, c1, c2, min_energy, max_energy, min_dance, max_dance)
-        print("++++++ Req. No. 2 results ... +++++ \n")
-        print("\nenergy is between "+ str(min_energy) + " and " + str(max_energy))
-        print("\ndanceability is between "+ str(min_dance) + " and " + str(max_dance))
+        print("\n++++++ Req. No. 2 results ... ++++++")
+        print("energy is between "+ str(min_energy) + " and " + str(max_energy))
+        print("danceability is between "+ str(min_dance) + " and " + str(max_dance))
 
         if respuesta == None:
             print("No se encontraron pistas que cumplan con los requisitos")
@@ -176,13 +183,13 @@ while True:
         min_tempo = float(input("Valor minimo de tempo: "))
         max_tempo = float(input("Valor máximo de tempo: "))
 
-        c1 = str(instrumentalness)
-        c2 = str(tempo)
+        c1 = "instrumentalness"
+        c2 = "tempo"
         
         respuesta = controller.getMusicapara(analyzer, c1, c2, min_inst, max_inst, min_tempo, max_tempo)
-        print("++++++ Req. No. 3 results ... +++++ \n")
-        print("\ninstrumentalness is between "+ str(min_inst) + " and " + str(max_inst))
-        print("\ntempo is between "+ str(min_tempo) + " and " + str(max_tempo))
+        print("\n++++++ Req. No. 3 results ... ++++++")
+        print("instrumentalness is between "+ str(min_inst) + " and " + str(max_inst))
+        print("tempo is between "+ str(min_tempo) + " and " + str(max_tempo))
 
         if respuesta == None:
             print("No se encontraron pistas que cumplan con los requisitos")

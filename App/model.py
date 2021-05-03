@@ -267,7 +267,7 @@ def getMusicapara(analyzer, c1, c2, min_c1, max_c1, min_c2, max_c2):
     for pista in lt.iterator(analyzer["eventos"]):
         if float(pista[c1]) <= max_c1 and float(pista[c1]) >= min_c1:
             if float(pista[c2]) <= max_c2 and float(pista[c2]) >= min_c2:
-                om.put(pista_cumple, pista["track_id"], (pista[c1], pista[c2]))
+                om.put(map_pista_cumple, pista["track_id"], (pista[c1], pista[c2]))
 
     num_unicas = om.size(map_pista_cumple)
 

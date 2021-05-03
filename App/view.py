@@ -102,8 +102,9 @@ def printData(eventos,artistas,pistas,listaI, listaF):
 
         cf += 1
 
-def printReproducciones (reproducciones, artistas):
-    pass
+def printReproducciones (respuesta):
+    print("\n Total de reproducciones: " + str(respuesta[0])
+          + "\n Total de artistas únicos: " + str(respuesta[1]))
 
 def printFestejar (pistas):
     pass
@@ -128,8 +129,10 @@ while True:
         min = int(input("Valor minimo: "))
         max = int(input("Valor máximo: "))
         respuesta = controller.getReproducciones(analyzer, contenido, min, max)
+        print("++++++ Req. No. 1 results ... +++++ \n" + contenido + " is between "
+              + str(min) + " and " + str(max))
         if respuesta == None:
-            print("No se encontraron reproducciones")
+            print("\n No se encontraron reproducciones")
         else:
             printReproducciones(respuesta)
         

@@ -243,7 +243,18 @@ def getReproducciones(analyzer, contenido, min, max):
     Retorna el total de reproducciones (eventos de escucha) que se tienen en el sistema de
     recomendación basado en una característica de contenido y con un rango determinado
     """
-    pass
+    num_eventos = 0
+    map_art_cumple = om.newMap(omaptype='RBT',comparefunction=compareArtistas)
+
+
+    for evento in lt.iterator(analyzer):
+        if evento[contenido] <= max and evento[contenido] >= min :
+            num_eventos += 1
+            om.put(map_art_cumple, evento['artist_id'],"")
+
+    num_artistas = om.size(map_art_cumple)
+
+return (num_eventos, num_artistas)
 
 def getFestejar (analyzer, min_energy, max_energy, min_dance, max_dance):
     """

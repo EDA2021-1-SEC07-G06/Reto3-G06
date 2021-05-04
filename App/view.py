@@ -126,14 +126,7 @@ def printMusicapara(respuesta, c1, c2):
                      " and " + str(c2) + " of " + str(valor[1]) + "\n")         
             if cont > 4:
                 return
-"""
-    if lt.size(cod) >= 5:
-        for id in lt.iterator(cod):
-            for pista in lt.iterator(lst):
-                while cont < 5:    
-                    cont += 1
-                    print("Track: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
-                      " and " + str(c2) + " of " + str(pista[1]) + "\n")              
+         
     else:
         for id in lt.iterator(cod):
             for pista in lt.iterator(lst):
@@ -143,7 +136,7 @@ def printMusicapara(respuesta, c1, c2):
                       " and " + str(c2) + " of " + str(pista[1]) + "\n")
                 
 
-"""
+
 """
 Menu principal
 """

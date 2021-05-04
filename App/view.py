@@ -136,7 +136,6 @@ def printMusicapara(respuesta, c1, c2):
                       " and " + str(c2) + " of " + str(pista[1]) + "\n")
                 
 
-
 """
 Menu principal
 """

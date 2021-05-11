@@ -293,9 +293,46 @@ while True:
             printMusicapara(respuesta, c1, c2)
 
     elif int(inputs[0]) == 5:
-        pass
+    
+        delta_time = -1.0
+        delta_memory = -1.0
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        
+
+
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+    
+        delta_time = stop_time - start_time
+        delta_memory = deltaMemory(start_memory, stop_memory)
+        print("\nTiempo [ms]: " + str(delta_time) + "  ||  " + 
+              "Memoria [kB]: " + str(delta_memory) + "\n")
+
+        print("\n++++++ Req. No. 4 results ... ++++++")
+
     elif int(inputs[0]) == 6:
-        pass
+        delta_time = -1.0
+        delta_memory = -1.0
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+        
+
+
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+    
+        delta_time = stop_time - start_time
+        delta_memory = deltaMemory(start_memory, stop_memory)
+        print("\nTiempo [ms]: " + str(delta_time) + "  ||  " + 
+              "Memoria [kB]: " + str(delta_memory) + "\n")
+
+        print("\n++++++ Req. No. 5 results ... ++++++")
+
 
     else:
         sys.exit(0)

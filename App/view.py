@@ -27,6 +27,8 @@ import sys
 import controller
 from DISClib.ADT import orderedmap as om
 from DISClib.ADT import list as lt
+import time
+import tracemalloc
 assert cf
 
 
@@ -134,6 +136,37 @@ def printMusicapara(respuesta, c1, c2):
                     cont += 1
                     print("Track: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
                       " and " + str(c2) + " of " + str(pista[1]) + "\n")
+
+
+def getTime():
+    """
+    devuelve el instante tiempo de procesamiento en milisegundos
+    """
+    return float(time.perf_counter()*1000)
+
+
+def getMemory():
+    """
+    toma una muestra de la memoria alocada en instante de tiempo
+    """
+    return tracemalloc.take_snapshot()
+
+
+def deltaMemory(start_memory, stop_memory):
+    """
+    calcula la diferencia en memoria alocada del programa entre dos
+    instantes de tiempo y devuelve el resultado en bytes (ej.: 2100.0 B)
+    """
+    memory_diff = stop_memory.compare_to(start_memory, "filename")
+    delta_memory = 0.0
+
+    # suma de las diferencias en uso de memoria
+    for stat in memory_diff:
+        delta_memory = delta_memory + stat.size_diff
+    # de Byte -> kByte
+    delta_memory = delta_memory/1024.0
+    return delta_memory
+
                 
 
 """
@@ -145,7 +178,8 @@ while True:
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         analyzer = controller.init()
-        listas = controller.loadData(analyzer)
+        datos_l = controller.loadData(analyzer)
+        listas = datos_l[0]
         eventos = controller.tamañoEventos(analyzer)
         artistas = controller.tamañoArtistas(analyzer)
         pistas = controller.tamañoPistas(analyzer)

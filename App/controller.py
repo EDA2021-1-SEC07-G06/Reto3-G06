@@ -20,6 +20,9 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+import time
+import tracemalloc
+
 import config as cf
 from DISClib.ADT import list as lt
 import model
@@ -48,9 +51,27 @@ def loadData(analyzer):
     estructura de datos
     """
     
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+
+
     loadEtiquetas(analyzer)
     loadSenValues(analyzer)
-    return loadEventos(analyzer)
+    eventos = loadEventos(analyzer)
+
+    
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+
+    return eventos, delta_time, delta_memory   
     
     
 

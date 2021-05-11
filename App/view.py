@@ -178,18 +178,43 @@ while True:
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         analyzer = controller.init()
-        datos_l = controller.loadData(analyzer)
-        listas = datos_l[0]
+        controller.loadData(analyzer)
+        listas = controller.loadData(analyzer)[0]
         eventos = controller.tamañoEventos(analyzer)
         artistas = controller.tamañoArtistas(analyzer)
         pistas = controller.tamañoPistas(analyzer)
         printData(str(eventos),str(artistas),str(pistas),listas[0],listas[1])
+        
+        answer = controller.loadData(analyzer)
+        print("Tiempo [ms]: ", f"{answer[1]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{answer[2]:.3f}"), "/n "
+
 
     elif int(inputs[0]) == 2:
         contenido = input("Característica de contenido buscada: ")
         min = float(input("Valor minimo: "))
         max = float(input("Valor máximo: "))
+
+        delta_time = -1.0
+        delta_memory = -1.0
+
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+
+
         respuesta = controller.getReproducciones(analyzer, contenido, min, max)
+
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+
+        delta_time = stop_time - start_time
+        delta_memory = deltaMemory(start_memory, stop_memory)
+
+        print("Tiempo [ms]: " + str(delta_time) + "  ||  " + 
+              "Memoria [kB]: " + str(delta_memory) + "/n ")
+
         print("++++++ Req. No. 1 results ... +++++ \n" + contenido + " is between "
               + str(min) + " and " + str(max))
         if respuesta == None:

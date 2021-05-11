@@ -208,12 +208,10 @@ while True:
         stop_memory = getMemory()
         stop_time = getTime()
         tracemalloc.stop()
-
         delta_time = stop_time - start_time
         delta_memory = deltaMemory(start_memory, stop_memory)
-
-        print("Tiempo [ms]: " + str(delta_time) + "  ||  " + 
-              "Memoria [kB]: " + str(delta_memory) + "/n ")
+        print("\nTiempo [ms]: " + str(delta_time) + "  ||  " + 
+              "Memoria [kB]: " + str(delta_memory) + "\n")
 
         print("++++++ Req. No. 1 results ... +++++ \n" + contenido + " is between "
               + str(min) + " and " + str(max))
@@ -231,7 +229,24 @@ while True:
         c1 = "energy"
         c2 = "danceability"
         
+        delta_time = -1.0
+        delta_memory = -1.0
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
+
         respuesta = controller.getMusicapara(analyzer, c1, c2, min_energy, max_energy, min_dance, max_dance)
+        
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+
+        delta_time = stop_time - start_time
+        delta_memory = deltaMemory(start_memory, stop_memory)
+        print("\nTiempo [ms]: " + str(delta_time) + "  ||  " + 
+              "Memoria [kB]: " + str(delta_memory) + "\n")
+
+
         print("\n++++++ Req. No. 2 results ... ++++++")
         print("energy is between "+ str(min_energy) + " and " + str(max_energy))
         print("danceability is between "+ str(min_dance) + " and " + str(max_dance))
@@ -249,8 +264,25 @@ while True:
 
         c1 = "instrumentalness"
         c2 = "tempo"
+
+        
+        delta_time = -1.0
+        delta_memory = -1.0
+        tracemalloc.start()
+        start_time = getTime()
+        start_memory = getMemory()
         
         respuesta = controller.getMusicapara(analyzer, c1, c2, min_inst, max_inst, min_tempo, max_tempo)
+        
+        stop_memory = getMemory()
+        stop_time = getTime()
+        tracemalloc.stop()
+
+        delta_time = stop_time - start_time
+        delta_memory = deltaMemory(start_memory, stop_memory)
+        print("\nTiempo [ms]: " + str(delta_time) + "  ||  " + 
+              "Memoria [kB]: " + str(delta_memory) + "\n")
+
         print("\n++++++ Req. No. 3 results ... ++++++")
         print("instrumentalness is between "+ str(min_inst) + " and " + str(max_inst))
         print("tempo is between "+ str(min_tempo) + " and " + str(max_tempo))

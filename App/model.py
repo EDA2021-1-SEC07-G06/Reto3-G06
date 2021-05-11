@@ -25,12 +25,15 @@
  """
 
 
+
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Trees import traversal as tv
+from datetime import datetime
 assert cf
 
 # Construccion de modelos
@@ -43,19 +46,18 @@ def newAnalyzer():
     analyzer = {'eventos': None,
                 'sentimental_values': None,
                 'evento_etiquetas' : None,
-                'contenido':None,
                 'artistas': None,
                 'pistasIds': None,
-                'treeEvents': None
+                'treeEvents': None,
+                'GenerosMusicales' : None
                 }
 
     analyzer['eventos'] = lt.newList('ARRAY_LIST')
     analyzer['sentimental_values'] = lt.newList('ARRAY_LIST')
     analyzer['evento_etiquetas'] = lt.newList('ARRAY_LIST')
-    analyzer['contenido'] = om.newMap(omaptype='RBT')
-    analyzer['artistas'] = om.newMap(omaptype='RBT',comparefunction=compareArtistas)
     analyzer['pistasIds'] = om.newMap(omaptype='RBT',comparefunction=compareIds)
     analyzer['treeEvents'] = om.newMap(omaptype='RBT',comparefunction=compareIds)
+    analyzer['GenerosMusicales'] = mp.newMap(100,prime=109345121,maptype='PROBING',loadfactor=0.5)
     return analyzer
 
 # Funciones para agregar informacion al catalogo
@@ -66,8 +68,74 @@ def addEvento(analyzer, evento):
     apuntadores al map artistas.
     """
     lt.addLast(analyzer['eventos'],evento)
-    addEventoArtista(analyzer, evento)
     addTreeEvent(analyzer, evento)
+
+    generos =  analyzer['GenerosMusicales']
+    bpm = float(evento['tempo'])
+    if (bpm >= float(60)):
+        if(bpm >= float(90)):
+            entry = mp.get(generos,'reggae')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+
+    if bpm >= float(70):
+        if(bpm >= float(100.000)):
+            entry = mp.get(generos,'down-tempo')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+
+    if bpm >= float(90):
+        if bpm >= float(120):
+            entry = mp.get(generos,'chill-out')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+
+    if bpm >= float(85):
+        if bpm >= float(115):
+            entry = mp.get(generos,'hip-hop')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+
+    if bpm >= float(120):
+        if bpm >= float(125):
+            entry = mp.get(generos,'jazz and funk')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+
+    if bpm >= float(100):
+        if bpm >= float(130):
+            entry = mp.get(generos,'pop')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+
+    if bpm >= float(60):
+        if bpm >= float(80):
+            entry = mp.get(generos,'r&b')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+
+    if bpm >= float(110):
+        if bpm >= float(140):
+            entry = mp.get(generos,'rock')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+    
+    if bpm >= float(100):
+        if bpm >= float(160):
+            entry = mp.get(generos,'metal')
+            valor = me.getValue(entry)
+            addEventoArtista(valor['artistas'], evento)
+            lt.addLast(valor['eventos'], evento)
+
+
 
 
 def addSentimentalValue(analyzer, value):
@@ -88,7 +156,7 @@ def addEventoArtista(analyzer, evento):
     """
     Añade al map de artistas cada artista con el evento determinado
     """
-    artistas = analyzer['artistas']
+    artistas = analyzer
     existeArtista = om.contains(artistas, evento['artist_id'])
     if existeArtista:
        entry = om.get(artistas, evento['artist_id'])
@@ -139,6 +207,14 @@ def addTreeEvent(analyzer, evento):
        
 
 # Funciones para creacion de datos
+def newGenero(genero):
+    entry = {'genero': None , 'eventos': None,'artistas' : None, 'T1': None,'T2' :None}
+    entry['genero'] = genero
+    entry['artistas'] = om.newMap(omaptype='RBT',comparefunction=compareArtistas)
+    entry['eventos'] = lt.newList('ARRAY_LIST')
+
+    return entry
+
 
 def newTreeEvent(evento):
     """
@@ -171,27 +247,191 @@ def newPistaId(pista):
     return entry
 
 
+def crearGeneros(analyzer):
+    arbolGeneros = analyzer['GenerosMusicales']
+    reg = 'reggae'
+    dt = 'down-tempo'
+    co = 'chill-out'
+    hh = 'hip-hop'
+    jf = 'jazz and funk'
+    pop = 'pop'
+    rb = 'r&b'
+    rc = 'rock'
+    mt = 'metal'
+    lista = {reg,dt,co,hh,jf,pop,rb,rc,mt}
+    for n in lista:
+
+        if n == reg:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 60
+            nuevo['T2'] = 90
+            
+        if n == dt:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 70
+            nuevo['T2'] = 100
+        if n == co:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 90
+            nuevo['T2'] = 120
+        if n == hh:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 85
+            nuevo['T2'] = 115
+        if n == jf:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 120
+            nuevo['T2'] =125
+        if n == pop:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 100
+            nuevo['T2'] = 130
+        if n == rb:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 60
+            nuevo['T2'] = 80
+        if n == rc:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 110
+            nuevo['T2'] = 140
+        if n == mt:
+            nuevo = newGenero(n)
+            nuevo['T1'] = 100
+            nuevo['T2'] = 160
+        
+        mp.put(arbolGeneros,n,nuevo)
+
 # Funciones de consulta
 
-
-def eventosCargados(analyzer):
-   """
-   Retorna los primeros 5 elementos cargados y los ultimos 5 elementos cargados.
-   """
-
-   pass
-
-
-
-def artistasSize(analyzer):
-
-    """
-    Retorna el numero de elementos en el map de artistas
-    """
-    artistas = analyzer['artistas']
-    return om.size(artistas)
-
+def estudiarGenerosMusicales(analyzer,pGenero):
     
+    generosMusicales = analyzer['GenerosMusicales']
+
+    totalEventos = 0
+    
+    genero = pGenero.lower()
+    corta = genero.strip()
+    generos = corta.split(',')
+    
+    eventosGenero = mp.newMap(10,prime=109345121,maptype='PROBING', loadfactor=0.5)
+    numeroArtistas = mp.newMap(10,prime=109345121,maptype='PROBING', loadfactor=0.5)
+    limitesGenero = mp.newMap(10,prime=109345121,maptype='PROBING', loadfactor=0.5)
+
+    tam = len(generos)
+    pos = 0
+    while tam > 0:
+        elemento = generos[pos]
+        entry = mp.get(generosMusicales, elemento)
+
+        listaEventos = me.getValue(entry)
+        tamañoListaEventos = lt.size(listaEventos['eventos'])
+        tamañoArtistas = om.size(listaEventos['artistas'])
+        T1 = listaEventos['T1']
+        T2 = listaEventos['T2']
+        totalEventos += tamañoListaEventos
+
+        entry = { 'genero' : elemento, 'T1': T1,'T2': T2}
+
+        mp.put(eventosGenero,elemento,tamañoListaEventos)
+        mp.put(numeroArtistas, elemento, tamañoArtistas)
+        mp.put(limitesGenero, elemento, entry)
+    
+        
+        pos += 1
+        tam -= 1
+
+
+    return totalEventos,eventosGenero,numeroArtistas,generos,limitesGenero
+
+def existeGenero(analyzer,pGenero):
+    arbolGeneros = analyzer['GenerosMusicales']
+    genero = pGenero.lower()
+    corta = genero.strip()
+    generos = corta.split(',')
+    rta = lt.newList('ARRAY_LIST')
+    existe = False
+    for i in generos:
+        i.strip()
+    for gen in generos:
+        gexiste = mp.contains(arbolGeneros, gen)
+        if(gexiste):
+            existe = True
+        else:
+            lt.addLast(rta,gen)
+            existe = False
+
+    return rta, existe
+
+def buscarlistatracks(analyzer, trackId):
+        tracks = analyzer['pistasIds']
+        entry = om.get(tracks,trackId)
+        valor = me.getValue(entry)
+        etiquetas = valor['etiquetas']
+        return etiquetas
+
+def generoMasEscuchado(analyzer,horaI,horaF):
+ 
+    generos = analyzer['GenerosMusicales']
+    tracks = analyzer['pistasIds']
+    cantidadTracks = 0
+
+
+    generoReproducciones = mp.newMap(10,prime=109345121,maptype='PROBING', loadfactor=0.5)
+    tracks = mp.newMap(10,prime=109345121,maptype='PROBING', loadfactor=0.5)
+    cont = 0
+    mayor = None
+
+
+    keys = tv.inorder(generos, cmpFuncion= compareIds)
+    for n in keys:
+        valor = me.getValue(n)
+        reproducciones = valor['eventos']
+        numReproducciones = 0
+
+        for elemento in reproducciones:  
+            dia = elemento['created_at']
+            horaDia = dia.split(' ')
+            
+            horaEvento = horaDia[1]
+
+            hora1 = datetime.strptime( horaEvento, "%X")
+            hora2 = datetime.strptime( horaI, "%X")
+            hora3 = datetime.strptime( horaF, "%X")
+
+            if( hora1 > hora2 and hora1 < hora3 ):
+                numReproducciones += 1
+
+            
+        mp.put(generoReproducciones,numReproducciones,n)
+        if (numReproducciones >= cont):
+            cont = numReproducciones
+            mayor = n
+    entry = mp.get(generos, mayor)
+    valor = me.getValue(entry)  
+    for n in valor:
+        trackId = n['track_id']
+        etiquetas = buscarlistatracks(analyzer,trackId) 
+        lista = lt.newList('ARRAY_LIST')
+        contador = 0
+        for e in etiquetas():
+            entrys = mp.get(etiquetas,e)
+            valor = me.getValue(entrys)
+            hashtag = valor['hashtag']
+            if lt.isPresent(lista,hashtag):
+                contador += 1
+            else:
+                lt.put(lista,hashtag)
+        entry = { 'contador' : contador, 'track_id': trackId}
+        mp.put(tracks,contador,entry)
+            
+    sa.sort(tracks, cmpfunction=compareIds)
+    sa.sort(generoReproducciones, cmpfunction=compareIds)
+
+
+    return mayor,cont,generoReproducciones,cantidadTracks,tracks
+
+         
+
 
 def eventosSize(analyzer):
 
@@ -210,6 +450,8 @@ def pistasSize(analyzer):
     """ 
     pistas = analyzer['pistasIds']
     return om.size(pistas)
+
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -234,6 +476,8 @@ def compareArtistas(artista1, artista2):
         return 1
     else:
         return -1
+
+
 
 
 # Funciones de ordenamiento

@@ -27,6 +27,8 @@ import sys
 import controller
 from DISClib.ADT import orderedmap as om
 from DISClib.ADT import list as lt
+from DISClib.ADT import map as mp
+from DISClib.DataStructures import mapentry as me
 assert cf
 
 
@@ -51,9 +53,8 @@ analyzer = None
 """
 Imprime la informacion cargada de los datos.
 """
-def printData(eventos,artistas,pistas,listaI, listaF):
+def printData(eventos,pistas,listaI, listaF):
     print('Total de registros de eventos de escucha cargados: '+ eventos)
-    print('Total de artistas únicos cargados: ' + artistas)
     print('Total de pistas de audio únicas cargadas: ' + pistas + '\n')
 
     tamañoI = lt.size(listaI)
@@ -94,9 +95,9 @@ def printData(eventos,artistas,pistas,listaI, listaF):
         print('***************************************************\n')
         print('Id del evento: ' + datosF['id'])
         print('')
-        print('Caracteristicas de contenido: \n' + 'Instrumentalidad: ' + datosF['instrumentalness'] +'\n'+'Acústica' + datosF['acousticness'] +'\n' 
+        print('Caracteristicas de contenido: \n' + 'Instrumentalidad: ' + datosF['instrumentalness'] +'\n'+'Acústica: ' + datosF['acousticness'] +'\n' 
         +'Liveness: ' + datosF['liveness'] +'\n'+'speechiness: ' + datosF['speechiness'] +'\n'+'Energía: ' + datosF['energy'] +'\n'
-        +'Capacidad de baile: ' + datosF['danceability'] +'\n'+'Valencia'  + datosF['valence'] +'\n')
+        +'Capacidad de baile: ' + datosF['danceability'] +'\n'+'Valencia: '  + datosF['valence'] +'\n')
        
         print('Caracteristicas de contexto: \n' + 'Creado en: ' + datosF['created_at'] +'\n'+'Idioma del tweet: ' 
          + datosF['tweet_lang'] +'\n' +'Idioma: '+ datosF['lang'] +'\n'+'Time Zone: '+ datosF['time_zone'] +'\n')
@@ -135,6 +136,27 @@ def printMusicapara(respuesta, c1, c2):
                     print("Track: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
                       " and " + str(c2) + " of " + str(pista[1]) + "\n")
                 
+def imprimirEstudio(totalEventos, eventosGenero, numeroArtistas,generos,limitesGenero):
+    
+    print("") 
+    print("Total de reproducciones: " + str(totalEventos))
+    print("")
+
+    for n in generos:
+        entry1 = mp.get(eventosGenero,n)
+        valor = me.getValue(entry1)
+
+        entry2 = mp.get(numeroArtistas,n)
+        valorArtista = me.getValue(entry2)
+
+        entry3 = mp.get(limitesGenero,n)
+        limites = me.getValue(entry3)
+        limite1 = limites['T1']
+        limite2 = limites['T2']
+
+        print("============="+ n.upper() + "=============")
+        print("Para " + n.upper() + " el tempo es entre " +str(limite1) + " y " + str(limite2) + " BPM")
+        print("Reproducciones de "+ n.upper()+": "+ str(valor) + " con "+ str(valorArtista) + " artistas. " )
 
 """
 Menu principal
@@ -147,9 +169,8 @@ while True:
         analyzer = controller.init()
         listas = controller.loadData(analyzer)
         eventos = controller.tamañoEventos(analyzer)
-        artistas = controller.tamañoArtistas(analyzer)
         pistas = controller.tamañoPistas(analyzer)
-        printData(str(eventos),str(artistas),str(pistas),listas[0],listas[1])
+        printData(str(eventos),str(pistas),listas[0],listas[1])
 
     elif int(inputs[0]) == 2:
         contenido = input("Característica de contenido buscada: ")
@@ -202,10 +223,63 @@ while True:
             printMusicapara(respuesta, c1, c2)
 
     elif int(inputs[0]) == 5:
-        pass
-    elif int(inputs[0]) == 6:
-        pass
+        genero = input("Genero(s) que desea estudiar: ")
+        existe = controller.existeGenero(analyzer,genero)
+        if(existe[1]):
+            rta = controller.estudiarGenerosMusicales(analyzer,genero)
+            imprimirEstudio(rta[0],rta[1],rta[2],rta[3],rta[4])
 
+        elif(existe[1]== False):
+            noEncontrados = existe[0]
+            rest = None
+            print("Genero(s) no econtrado(s): ")
+            tam = lt.size(noEncontrados)
+            pos = 0
+            while tam > 0:
+                elemento = lt.getElement(noEncontrados,pos)
+                print(elemento)
+                tam -= 1
+                pos += 1
+            rta = input("¿desea crearlo(s)?\n1. Si\n2. No\n")
+            if(rta == str(1)):
+                for i in noEncontrados:
+                    T1 = input("Digite el valor minimo para el tempo para " + n +": ") 
+                    T2 = input("Digite el valor maximo para el tempo para " + n +": ")
+                    controller.crearGenero(analyzer,n,float(T1),float(T2))
+            
+    elif int(inputs[0]) == 6:
+        horaI = input("Valor minimo de hora: ")
+        horaF = input("valor maximo de hora: ")
+        rta = controller.generoMasEscuchado(analyzer,horaI,horaF)
+        print("")
+        print("Total de reproducciones entre " + horaI + " & " + horaF + ": " + rta[1])
+        print("")
+        print("========REPRODUCCIONES DE GENEROS=======")
+        lista1 = rta[2] 
+        cont = 1
+        for n in lista1:
+            
+            key = me.getKey(n)
+            valor = me.getValue(n)
+            print("TOP " + str(cont) + ": " + valor + " con " + key + "reproducciones" )
+            cont += 1
+        print("")
+        print("El genero TOP es: " + rta[0] + " con " + rta[1] + " reproducciones.") 
+
+        print("============"+ rta[0] + "SENTIMENTAL VALUES" + +"===========")
+        print(rta[0] + " tiene " + rta[3] + " tracks unicos.")
+        print("El top 10 de tracks son: ")
+        print("")
+        con = 1
+        lista2 = rta[4]
+        for i in lista2:
+           key = me.getKey(i)
+           valor = me.getValue(i)
+           print("TOP " + str(con) + " track: " +  valor + " con " + key + " hashtags")
+
+           if con == 10:
+               break
+           con +=1
     else:
         sys.exit(0)
 sys.exit(0)

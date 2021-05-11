@@ -47,7 +47,7 @@ def loadData(analyzer):
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
     """
-    
+    model.crearGeneros(analyzer)
     loadEtiquetas(analyzer)
     loadSenValues(analyzer)
     return loadEventos(analyzer)
@@ -139,4 +139,17 @@ def getMusicapara(analyzer, c1, c2, min_c1, max_c1, min_c2, max_c2):
     """
     musica = model.getMusicapara(analyzer, c1, c2, min_c1, max_c1, min_c2, max_c2)
     return musica
+
+def estudiarGenerosMusicales(analyzer,genero):
+    estudio = model.estudiarGenerosMusicales(analyzer,genero)
+    return estudio
+
+def existeGenero(analyzer,genero):
+    existe = model.existeGenero(analyzer,genero)
+    return existe
+
+def generoMasEscuchado(analyzer,horaI,horaF):
+    metodo = model.generoMasEscuchado(analyzer,horaI,horaF)
+    return metodo
+    
 

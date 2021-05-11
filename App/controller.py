@@ -79,7 +79,7 @@ def loadEventos(analyzer):
     """
     Carga los videos del archivo.
     """
-    eventosfile = cf.data_dir + 'context_content_features-30pct.csv'
+    eventosfile = cf.data_dir + 'context_content_features-small.csv'
     input_file = csv.DictReader(open(eventosfile, encoding='utf-8'))
     contador = 0
     tamaño = 0
@@ -109,7 +109,7 @@ def loadEtiquetas(analyzer):
     """
     Carga los videos del archivo.
     """
-    etiquetasfile = cf.data_dir + 'user_track_hashtag_timestamp-30pct.csv'
+    etiquetasfile = cf.data_dir + 'user_track_hashtag_timestamp-small.csv'
     input_file = csv.DictReader(open(etiquetasfile, encoding='utf-8'))
     for etiqueta in input_file:
         model.addEtiquetas(analyzer, etiqueta)

@@ -1,9 +1,10 @@
 Responder preguntas y marcar con el nombre de los integrantes
 
-Alejandra Melo
-Cod: 202021526
-Correo:      a.melo4@uniandes.edu.co
 
-Obed Cabanzo  
-Cod: 201911749
-Correo: jo.cabanzo@uniandes.edu.co 
+Alejandra Melo - Req 2 
+a.melo4@uniandes.edu.co
+202021526
+
+Obed Cobanzo - Req 3
+jo.cobanzo@uniandes.edu.co
+201911749

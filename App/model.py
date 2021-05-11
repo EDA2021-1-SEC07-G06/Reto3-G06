@@ -370,7 +370,7 @@ def buscarlistatracks(analyzer, trackId):
         return etiquetas
 
 def generoMasEscuchado(analyzer,horaI,horaF):
- 
+
     generos = analyzer['GenerosMusicales']
     tracks = analyzer['pistasIds']
     cantidadTracks = 0
@@ -382,7 +382,7 @@ def generoMasEscuchado(analyzer,horaI,horaF):
     mayor = None
 
 
-    keys = tv.inorder(generos, cmpFuncion= compareIds)
+    keys = tv.inorder(generos)
     for n in keys:
         valor = me.getValue(n)
         reproducciones = valor['eventos']

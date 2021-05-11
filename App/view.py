@@ -29,6 +29,8 @@ from DISClib.ADT import orderedmap as om
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
+import time
+import tracemalloc
 assert cf
 
 
@@ -135,6 +137,37 @@ def printMusicapara(respuesta, c1, c2):
                     cont += 1
                     print("Track: "+ str(id) + " with " + str(c1) + " of " + str(pista[0]) + 
                       " and " + str(c2) + " of " + str(pista[1]) + "\n")
+
+
+def getTime():
+    """
+    devuelve el instante tiempo de procesamiento en milisegundos
+    """
+    return float(time.perf_counter()*1000)
+
+
+def getMemory():
+    """
+    toma una muestra de la memoria alocada en instante de tiempo
+    """
+    return tracemalloc.take_snapshot()
+
+
+def deltaMemory(start_memory, stop_memory):
+    """
+    calcula la diferencia en memoria alocada del programa entre dos
+    instantes de tiempo y devuelve el resultado en bytes (ej.: 2100.0 B)
+    """
+    memory_diff = stop_memory.compare_to(start_memory, "filename")
+    delta_memory = 0.0
+
+    # suma de las diferencias en uso de memoria
+    for stat in memory_diff:
+        delta_memory = delta_memory + stat.size_diff
+    # de Byte -> kByte
+    delta_memory = delta_memory/1024.0
+    return delta_memory
+
                 
 def imprimirEstudio(totalEventos, eventosGenero, numeroArtistas,generos,limitesGenero):
     
@@ -167,16 +200,26 @@ while True:
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         analyzer = controller.init()
-        listas = controller.loadData(analyzer)
+        controller.loadData(analyzer)
+        listas = controller.loadData(analyzer)[0]
         eventos = controller.tamañoEventos(analyzer)
         pistas = controller.tamañoPistas(analyzer)
         printData(str(eventos),str(pistas),listas[0],listas[1])
+        
+        answer = controller.loadData(analyzer)
+        print("Tiempo [ms]: ", f"{answer[1]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{answer[2]:.3f}"), "/n "
+
 
     elif int(inputs[0]) == 2:
+
         contenido = input("Característica de contenido buscada: ")
         min = float(input("Valor minimo: "))
         max = float(input("Valor máximo: "))
+
+
         respuesta = controller.getReproducciones(analyzer, contenido, min, max)
+
         print("++++++ Req. No. 1 results ... +++++ \n" + contenido + " is between "
               + str(min) + " and " + str(max))
         if respuesta == None:
@@ -193,7 +236,11 @@ while True:
         c1 = "energy"
         c2 = "danceability"
         
+
+
         respuesta = controller.getMusicapara(analyzer, c1, c2, min_energy, max_energy, min_dance, max_dance)
+
+
         print("\n++++++ Req. No. 2 results ... ++++++")
         print("energy is between "+ str(min_energy) + " and " + str(max_energy))
         print("danceability is between "+ str(min_dance) + " and " + str(max_dance))
@@ -211,8 +258,9 @@ while True:
 
         c1 = "instrumentalness"
         c2 = "tempo"
-        
+
         respuesta = controller.getMusicapara(analyzer, c1, c2, min_inst, max_inst, min_tempo, max_tempo)
+
         print("\n++++++ Req. No. 3 results ... ++++++")
         print("instrumentalness is between "+ str(min_inst) + " and " + str(max_inst))
         print("tempo is between "+ str(min_tempo) + " and " + str(max_tempo))
@@ -223,6 +271,7 @@ while True:
             printMusicapara(respuesta, c1, c2)
 
     elif int(inputs[0]) == 5:
+
         genero = input("Genero(s) que desea estudiar: ")
         existe = controller.existeGenero(analyzer,genero)
         if(existe[1]):
@@ -246,8 +295,13 @@ while True:
                     T1 = input("Digite el valor minimo para el tempo para " + n +": ") 
                     T2 = input("Digite el valor maximo para el tempo para " + n +": ")
                     controller.crearGenero(analyzer,n,float(T1),float(T2))
+
+
+        
             
     elif int(inputs[0]) == 6:
+        
+        
         horaI = input("Valor minimo de hora: ")
         horaF = input("valor maximo de hora: ")
         rta = controller.generoMasEscuchado(analyzer,horaI,horaF)
@@ -276,10 +330,11 @@ while True:
            key = me.getKey(i)
            valor = me.getValue(i)
            print("TOP " + str(con) + " track: " +  valor + " con " + key + " hashtags")
-
            if con == 10:
-               break
-           con +=1
+              break
+        con +=1
+
+        
     else:
         sys.exit(0)
 sys.exit(0)
